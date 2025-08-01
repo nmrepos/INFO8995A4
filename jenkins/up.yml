@@ -1,0 +1,27 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Add Jenkins chart repo
+    kubernetes.core.helm_repository:
+      name: jenkins
+      repo_url: "https://charts.jenkins.io"
+  
+  - name: Create Jenkins namespace
+    kubernetes.core.k8s:
+      name: jenkins
+      api_version: v1
+      kind: Namespace
+      state: present
+  
+  - name: Deploy Jenkins persistent volume
+    kubernetes.core.k8s:
+      state: present
+      definition: "{{ lookup('file', './persistent-volume.yaml') }}"
+  
+  - name: Deploy latest version of Jenkins
+    kubernetes.core.helm:
+      name: jenkins
+      chart_ref: jenkins/jenkins
+      release_namespace: jenkins
+      values_files:
+      - "{{ values_file | default('values.yaml') }}"

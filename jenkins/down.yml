@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Remove Jenkins release and wait for completion
+    kubernetes.core.helm:
+      name: jenkins
+      release_namespace: jenkins
+      state: absent
+      wait: true
+  
+  - name: Remove Jenkins namespace
+    kubernetes.core.k8s:
+      name: jenkins
+      api_version: v1
+      kind: Namespace
+      state: absent
+      wait: true

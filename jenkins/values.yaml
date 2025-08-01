@@ -1,0 +1,44 @@
+controller:
+  admin:
+    username: "admin"
+    password: "admin123"
+  
+  serviceType: NodePort
+  nodePort: 32000
+  
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "512Mi"
+    limits:
+      cpu: "2000m"
+      memory: "2Gi"
+  
+  persistence:
+    enabled: true
+    existingClaim: jenkins-pvc
+    size: 10Gi
+  
+  installPlugins:
+    - kubernetes
+    - workflow-aggregator
+    - git
+    - configuration-as-code
+    - pipeline-stage-view
+    - build-timeout
+    - timestamper
+    - ws-cleanup
+    
+  JCasC:
+    enabled: true
+    defaultConfig: true
+
+agent:
+  enabled: true
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
