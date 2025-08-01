@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ngrok
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ngrok-secret
+  namespace: ngrok
+type: Opaque
+data:
+  # Replace the value below with your own base64-encoded ngrok authtoken
+  # echo -n 'YOUR_NGROK_AUTHTOKEN' | base64
+  authtoken: YOUR_NGROK_AUTHTOKEN
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ngrok
+  namespace: ngrok
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ngrok
+  template:
+    metadata:
+      labels:
+        app: ngrok
+    spec:
+      containers:
+      - name: ngrok
+        image: ngrok/ngrok:latest
+        args: ["http", "--log", "stdout", "gitea-http.default.svc.cluster.local:3000"]
+        env:
+        - name: NGROK_AUTHTOKEN
+          valueFrom:
+            secretKeyRef:
+              name: ngrok-secret
+              key: authtoken
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ngrok
+  namespace: ngrok
+spec:
+  type: ClusterIP
+  selector:
+    app: ngrok
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

@@ -1,0 +1,18 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Add gitea chart repo
+    kubernetes.core.helm_repository:
+      name: gitea-charts
+      repo_url: "https://dl.gitea.com/charts/"
+  - name: Deploy MySQL database
+    kubernetes.core.k8s:
+      state: present
+      definition: "{{ lookup('file', './mysql-deployment.yaml') }}"
+  - name: Deploy latest version of gitea
+    kubernetes.core.helm:
+      name: gitea
+      chart_ref: gitea-charts/gitea
+      release_namespace: default
+      values_files:
+      - "{{ values_file | default('values.yaml') }}"

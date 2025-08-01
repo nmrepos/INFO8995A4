@@ -1,0 +1,37 @@
+redis-cluster:
+  enabled: false
+redis:
+  enabled: true
+postgresql:
+  enabled: false
+postgresql-ha:
+  enabled: false
+
+# Disable the chart's built-in MySQL since we're deploying it manually
+mysql:
+  enabled: false
+
+# Enable persistent storage for repository data
+persistence:
+  enabled: true
+  size: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClass: ""
+
+gitea:
+  config:
+    database:
+      DB_TYPE: mysql
+      HOST: gitea-mysql:3306
+      NAME: gitea
+      USER: gitea
+      PASSWD: gitea-password
+    session:
+      PROVIDER: db
+    cache:
+      ADAPTER: redis
+      HOST: redis://gitea-redis:6379/0
+    queue:
+      TYPE: redis
+      CONN_STR: redis://gitea-redis:6379/0
