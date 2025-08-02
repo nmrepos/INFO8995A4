@@ -197,3 +197,7 @@ This shows successful integration where Jenkins:
 - Executes pipeline steps
 
 ---
+
+## Screeenshots
+
+[📄 View the Screenshots ](./Group12.pdf)
