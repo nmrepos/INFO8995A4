@@ -50,6 +50,10 @@ minikube start  # or your preferred k8s cluster
 ansible-playbook gitea/up.yml
 kubectl get pods
 kubectl port-forward svc/gitea-http 3000:3000
+
+ansible-playbook gitea/up.yml
+kubectl get pods
+kubectl port-forward svc/gitea-http 3000:3000
 ```
 
 Visit [http://localhost:3000](http://localhost:3000) to access Gitea.
