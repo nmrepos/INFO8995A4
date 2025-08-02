@@ -32,7 +32,7 @@ spec:
       containers:
       - name: ngrok
         image: ngrok/ngrok:latest
-        args: ["http", "--log", "stdout", "gitea-http.default.svc.cluster.local:3000"]
+        args: ["http", "--log", "stdout", "jenkins.jenkins.svc.cluster.local:8080"]
         env:
         - name: NGROK_AUTHTOKEN
           valueFrom:
